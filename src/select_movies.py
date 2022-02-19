@@ -12,7 +12,7 @@ def getMoviesInfo(movieBlock):
     return(movieTitle.get_attribute("innerHTML").strip())
     # get better data as actual result and only return movie if it has openings on that day
 
-def parseMoviesInLesHallesToday(driver):
+def parseMoviesInLesHalles(driver):
   movieList = [];
   try:
     movieBlocks = driver.find_elements(By.CSS_SELECTOR, ".slider-item .row")
@@ -24,17 +24,31 @@ def parseMoviesInLesHallesToday(driver):
     pass
   return movieList
 
+def removePreviousPickedMovies(movieList, previousAnswers):
+  return [movie for movie in movieList if movie not in previousAnswers]
+
 def pickMoviesToWatch(driver):
-  q = [
+  movieList = parseMoviesInLesHalles(driver)
+  mustWatch = [
     inquirer.Checkbox(
       "must_watch",
-      "Quel(s) film(s) souhaites-tu absolument voir ? (5 maximum)",
-      choices = parseMoviesInLesHallesToday(driver),
-      validate = lambda _, x: len(x) < 6
+      "Quel(s) film(s) souhaites-tu absolument voir ? (6 maximum)",
+      choices = movieList,
+      validate = lambda _, x: len(x) < 7
       ),
-    inquirer.Checkbox("may_watch", "Quel(s) film(s) est-tu prêt à voir ?", choices = parseMoviesInLesHallesToday(driver)),
-    # Remove already selected movies in first list
   ]
-  promptResult = inquirer.prompt(q)
-  return promptResult
+  mustWatchAnswer = inquirer.prompt(mustWatch)
+  maxLen = 6 - len(mustWatchAnswer['must_watch'])
+  if maxLen:
+    may_watch = [
+        inquirer.Checkbox(
+        "may_watch",
+        "Quel(s) film(s) souhaites-tu également voir ? (" + str(maxLen) + " maximum)",
+        choices = removePreviousPickedMovies(movieList, mustWatchAnswer['must_watch']),
+        validate = lambda _, x: len(x) < 6
+        ),
+    ]
+    shouldWatchAnswer = inquirer.prompt(may_watch)
+    return [mustWatchAnswer, shouldWatchAnswer]
+  return [mustWatchAnswer, None]
 
