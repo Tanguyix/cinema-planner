@@ -2,19 +2,16 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 import inquirer
 
-
-def getAvailableDays(driver):
-  driver.get("https://www.ugc.fr/cinema.html?id=10")
-
 def getDayName(dayElem):
-  return dayElem.get_attribute("innerHTML").strip()
+  dayElemSpan = dayElem.find_element(By.CSS_SELECTOR, "span")
+  return (dayElemSpan.get_attribute("innerHTML").strip(), dayElem)
 
 def pickDay(driver):
-  days = getAvailableDays(driver);
   try:
-    days = driver.find_elements(By.CSS_SELECTOR, "[id^=nav_date_] span")
+    days = driver.find_elements(By.CSS_SELECTOR, "[id^=nav_date_]")
     q = [inquirer.List("day", "Quel jour souhaites-tu aller au cinéma ?", choices = list(map(getDayName, days)))]
-    chosenDay = inquirer.prompt(q)
+    promptResult = inquirer.prompt(q)
+    promptResult["day"].click()
   except NoSuchElementException:
     print("error")
     pass

@@ -24,5 +24,10 @@ def parseMoviesInLesHallesToday():
   except NoSuchElementException:
     pass
 
+def openMoviePage():
+  driver.get("https://www.ugc.fr/cinema.html?id=10")
+  driver.find_element(By.CSS_SELECTOR, "#didomi-notice-agree-button").click()
+
+openMoviePage();
 day = pickDay(driver);
-# parseMoviesInLesHallesToday();
+parseMoviesInLesHallesToday();
