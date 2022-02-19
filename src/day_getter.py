@@ -1,6 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 import inquirer
+import time
 
 def getDayName(dayElem):
   dayElemSpan = dayElem.find_element(By.CSS_SELECTOR, "span")
@@ -12,6 +13,8 @@ def pickDay(driver):
     q = [inquirer.List("day", "Quel jour souhaites-tu aller au cinéma ?", choices = list(map(getDayName, days)))]
     promptResult = inquirer.prompt(q)
     promptResult["day"].click()
+    time.sleep(2)
+    # Properly handle loading
   except NoSuchElementException:
     print("error")
     pass
