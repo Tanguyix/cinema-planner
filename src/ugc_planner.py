@@ -5,6 +5,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 from day_getter import pickDay
 from select_movies import pickMoviesToWatch
+from pick_hours import pickHours
 
 driver = webdriver.Chrome()
 
@@ -14,5 +15,5 @@ def openMoviePage():
 
 openMoviePage()
 day = pickDay(driver)
+availableHours = pickHours()
 movies = pickMoviesToWatch(driver)
-print(movies)
