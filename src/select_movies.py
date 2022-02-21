@@ -32,13 +32,13 @@ def getMoviesInfo(movieBlock):
       })
 
 def parseMoviesInLesHalles(driver):
-  movieList = [];
+  movieList = []
   try:
     movieBlocks = driver.find_elements(By.CSS_SELECTOR, ".slider-item .row")
     for movieBlock in movieBlocks:
       movieInfo = getMoviesInfo(movieBlock)
       if movieInfo:
-        movieList.append(getMoviesInfo(movieBlock));
+        movieList.append(getMoviesInfo(movieBlock))
   except NoSuchElementException:
     pass
   return movieList

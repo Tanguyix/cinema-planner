@@ -13,7 +13,7 @@ def pickDay(driver):
     q = [inquirer.List("day", "Quel jour souhaites-tu aller au cinéma ?", choices = list(map(getDayName, days)))]
     promptResult = inquirer.prompt(q)
     promptResult["day"].click() # scroll to element if not in screen
-    time.sleep(2)
+    time.sleep(1)
     # Properly handle loading
   except NoSuchElementException:
     print("error")
