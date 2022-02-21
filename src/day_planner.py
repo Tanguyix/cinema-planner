@@ -40,28 +40,33 @@ def addMovieToPlan(plan, movie):
   return newPlan
 
 def createAllPlans(movies):
-  # need to create plans without some movies
   plan = []
+  # Add plan without first movie
   for i in range(len(movies[0]["movieTimes"])):
     plan.append([{ "title": movies[0]["title"], "mustWatch": movies[0]["mustWatch"], "movieTime": movies[0]["movieTimes"][i]}])
   for j in range(1, len(movies)):
     plan = addMovieToPlan(plan, movies[j])
   return plan
 
+def countMustWatch(plan):
+  return len([elem for elem in plan if elem["mustWatch"]])
+
 def getBestPlan(plans):
   currentMustWatch = 0
-  currentShouldWatch = 0
+  currentMayWatch = 0
   # currentBreakTime = 0
   # currentNonBreakTime = 0
   for plan in plans:
     if hasSimultanousMovies(plan):
       continue
-  #   else:
-  #     mw = countMustWatch(plan)
-  #     sw = countShouldWatch(plan)
-  #     if (mw > currentMustWatch or (mw == currentMustWatch and sw > currentShouldWatch)):
-  #       res = plan
-  # return plan
+    else:
+      mustWatch = countMustWatch(plan)
+      mayWatch = len(plan) - mustWatch
+      if (mustWatch > currentMustWatch or (mustWatch == currentMustWatch and mayWatch > currentMayWatch)):
+        currentMustWatch = mustWatch
+        currentMayWatch = mayWatch
+        res = plan
+  return res
         
       
 

@@ -52,23 +52,21 @@ def pickMoviesToWatch(driver):
   mustWatch = [
     inquirer.Checkbox(
       "must_watch",
-      "Quel(s) film(s) souhaites-tu absolument voir ? (6 maximum)",
+      "Quel(s) film(s) souhaites-tu absolument voir ? (5 maximum)",
       choices = movieList,
-      validate = lambda _, x: len(x) < 7
+      validate = lambda _, x: len(x) < 6
       ),
   ]
   mustWatchAnswer = inquirer.prompt(mustWatch)
   maxLen = 6 - len(mustWatchAnswer['must_watch'])
-  if maxLen:
-    may_watch = [
-        inquirer.Checkbox(
-        "may_watch",
-        "Quel(s) film(s) souhaites-tu également voir ? (" + str(maxLen) + " maximum)",
-        choices = removePreviousPickedMovies(movieList, mustWatchAnswer['must_watch']),
-        validate = lambda _, x: len(x) < 6
-        ),
-    ]
-    mayWatchAnswer = inquirer.prompt(may_watch)
-    return {"mustWatchAnswer": mustWatchAnswer["must_watch"], "mayWatchAnswer": mayWatchAnswer["may_watch"]}
-  return [mustWatchAnswer, None]
+  may_watch = [
+      inquirer.Checkbox(
+      "may_watch",
+      "Quel(s) film(s) souhaites-tu également voir ? (" + str(maxLen) + " maximum)",
+      choices = removePreviousPickedMovies(movieList, mustWatchAnswer['must_watch']),
+      validate = lambda _, x: len(x) < maxLen + 1
+      ),
+  ]
+  mayWatchAnswer = inquirer.prompt(may_watch)
+  return {"mustWatchAnswer": mustWatchAnswer["must_watch"], "mayWatchAnswer": mayWatchAnswer["may_watch"]}
 
