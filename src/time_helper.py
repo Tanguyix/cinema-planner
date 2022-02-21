@@ -21,8 +21,19 @@ def isAfter(firstTime, secondTime):
   firstMinutes = int(firstTime[3:5])
   secondHour = int(secondTime[0:2])
   secondMinutes = int(secondTime[3:5])
-  print("ft = ", firstTime, "st = ", secondTime, "isAfter = ", firstHour > secondHour or (firstHour == secondHour and firstMinutes > secondMinutes))
+  if (firstHour == 0 and secondHour > 0):
+    return True
+  if (secondHour == 0 and firstHour > 0):
+    return False
   return (firstHour > secondHour or (firstHour == secondHour and firstMinutes > secondMinutes))
 
 def isBefore(firstTime, secondTime):
   return isAfter(secondTime, firstTime)
+
+def hasSimultanousMovies(plan):
+  for i in range(len(plan) - 1) :
+    for j in range(1, len(plan)):
+      if ((isAfter(plan[i]["movieTime"]["endTime"], plan[j]["movieTime"]["startTime"]) and isBefore(plan[i]["movieTime"]["startTime"], plan[j]["movieTime"]["startTime"])) or (isAfter(plan[j]["movieTime"]["endTime"], plan[i]["movieTime"]["startTime"]) and isBefore(plan[j]["movieTime"]["startTime"], plan[i]["movieTime"]["startTime"]))):
+        return True
+  print("plan :", plan, "has no simultanous movies")
+  return False

@@ -1,9 +1,5 @@
 from time_helper import *
 
-maxMustWatch = 0
-maxShouldWatch = 0
-maxBreakTime = 0
-
 def removeUnavailableHoursForOneType(movies, availableHours):
   for movie in movies:
     movie["movieTimes"] = [movieTime for movieTime in movie["movieTimes"] if isAfter(movieTime["startTime"], availableHours["startHour"]) and isBefore(movieTime["endTime"], availableHours["endHour"])]
@@ -44,17 +40,33 @@ def addMovieToPlan(plan, movie):
   return newPlan
 
 def createAllPlans(movies):
+  # need to create plans without some movies
   plan = []
   for i in range(len(movies[0]["movieTimes"])):
     plan.append([{ "title": movies[0]["title"], "mustWatch": movies[0]["mustWatch"], "movieTime": movies[0]["movieTimes"][i]}])
   for j in range(1, len(movies)):
     plan = addMovieToPlan(plan, movies[j])
-  print(len(plan))
   return plan
+
+def getBestPlan(plans):
+  currentMustWatch = 0
+  currentShouldWatch = 0
+  # currentBreakTime = 0
+  for plan in plans:
+    if hasSimultanousMovies(plan):
+      continue
+  #   else:
+  #     mw = countMustWatch(plan)
+  #     sw = countShouldWatch(plan)
+  #     if (mw > currentMustWatch or (mw == currentMustWatch and sw > currentShouldWatch)):
+  #       res = plan
+  # return plan
+        
+      
 
 def planDay(movies, availableHours):
   moviesInAvailableHours = removeUnavailableHours(movies, availableHours)
   allMovies = groupAllMovies(moviesInAvailableHours)
-  graph = createAllPlans(allMovies)
-  print(graph)
-  # return plan
+  allPlans = createAllPlans(allMovies)
+  plan = getBestPlan(allPlans)
+  return plan
