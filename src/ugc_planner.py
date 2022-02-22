@@ -9,6 +9,7 @@ from select_movies import pickMoviesToWatch
 from pick_hours import pickHours
 from pick_cinema import pickCinema
 from day_planner import planDay
+from plan_display import displayPlan
 
 driver = webdriver.Chrome()
 
@@ -21,9 +22,10 @@ def openMoviePage(theatreId):
   except NoSuchElementException:
     pass
 
-theatreId = pickCinema()
-openMoviePage(theatreId)
-pickDay(driver)
+theatre = pickCinema()
+openMoviePage(theatre["id"])
+day = pickDay(driver)
 availableHours = pickHours()
 movies = pickMoviesToWatch(driver)
 plan = planDay(movies, availableHours)
+displayPlan(plan, day, theatre["name"])

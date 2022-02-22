@@ -1,4 +1,4 @@
-from time_helper import *
+from time_helper import diffTime, removeMinutes, addMinutes, isAfter, isBefore, hasSimultanousMovies
 
 def removeUnavailableHoursForOneType(movies, availableHours):
   for movie in movies:
@@ -63,7 +63,7 @@ def getBreakTimes(plan):
     return 0
   totalBreakTime = 0
   for i in range(len(plan) - 1):
-    totalBreakTime += diffTime(addMinutes(int(plan[i]["movieTime"]["endTime"][0:2]), int(plan[i]["movieTime"]["endTime"][3:5]), 15), plan[i + 1]["movieTime"]["startTime"])
+    totalBreakTime += diffTime(plan[i]["movieTime"]["endTime"], plan[i + 1]["movieTime"]["startTime"])
   return totalBreakTime
 
 def getBestPlan(plans):
@@ -82,16 +82,14 @@ def getBestPlan(plans):
         currentMustWatch = mustWatch
         currentMayWatch = mayWatch
         currentTotalBreakTime = totalBreakTimes
-        res = plan
-        # Probably a way to stop before the end, when mustWatch < currentMustWatch
-  print("best plan = ", res, "nbMustWatch = ", currentMustWatch, "nbShouldWatch = ", currentMayWatch, "break time total = ", currentTotalBreakTime)
+        res = orderedPlan
+        if (mustWatch < currentMustWatch):
+          break
   return res
         
-      
-
 def planDay(movies, availableHours):
   moviesInAvailableHours = removeUnavailableHours(movies, availableHours)
   allMovies = groupAllMovies(moviesInAvailableHours)
   allPlans = createAllPlans(allMovies)
-  plan = getBestPlan(allPlans)
-  return plan
+  planWithBreaks = getBestPlan(allPlans)
+  return planWithBreaks

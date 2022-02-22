@@ -58,7 +58,7 @@ def pickMoviesToWatch(driver):
       ),
   ]
   mustWatchAnswer = inquirer.prompt(mustWatch)
-  maxLen = 6 - len(mustWatchAnswer['must_watch'])
+  maxLen = 7 - len(mustWatchAnswer['must_watch'])
   may_watch = [
       inquirer.Checkbox(
       "may_watch",
