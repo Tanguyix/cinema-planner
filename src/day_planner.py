@@ -33,6 +33,8 @@ def duplicateList(list, nbDuplicates):
 
 def addMovieToPlan(plan, movie):
   newPlan = []
+  if (not len(movie["movieTimes"])):
+    return plan
   for i in range(len(plan)):
     newPlan = newPlan + duplicateList(plan[i], len(movie["movieTimes"]) + 1)
   for j in range(len(newPlan) - 1):
@@ -40,8 +42,7 @@ def addMovieToPlan(plan, movie):
   return newPlan
 
 def createAllPlans(movies):
-  plan = []
-  # Add plan without first movie
+  plan = [[]]
   for i in range(len(movies[0]["movieTimes"])):
     plan.append([{ "title": movies[0]["title"], "mustWatch": movies[0]["mustWatch"], "movieTime": movies[0]["movieTimes"][i]}])
   for j in range(1, len(movies)):
@@ -66,6 +67,7 @@ def getBestPlan(plans):
         currentMustWatch = mustWatch
         currentMayWatch = mayWatch
         res = plan
+  print(res)
   return res
         
       
