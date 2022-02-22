@@ -30,17 +30,22 @@ def isAfter(firstTime, secondTime):
 def isBefore(firstTime, secondTime):
   return isAfter(secondTime, firstTime)
 
+def areTwoMoviesSimultanous(movie1, movie2):
+  movie1EndTimeWithExtra = addMinutes(int(movie1["movieTime"]["endTime"][0:2]), int(movie1["movieTime"]["endTime"][3:5]), 15)
+  return ((isBefore(movie1["movieTime"]["startTime"], movie2["movieTime"]["startTime"]) and
+        isAfter(movie1EndTimeWithExtra, movie2["movieTime"]["startTime"])) or
+        (isAfter(movie1["movieTime"]["startTime"], movie2["movieTime"]["startTime"]) and
+        isBefore(movie1["movieTime"]["endTime"], movie2["movieTime"]["endTime"])))
+
 def hasSimultanousMovies(plan):
   for i in range(len(plan) - 1) :
-    for j in range(1, len(plan)):
-      if ((isAfter(addMinutes(int(plan[i]["movieTime"]["endTime"][0:2]), int(plan[i]["movieTime"]["endTime"][3:5]), 15), plan[j]["movieTime"]["startTime"]) and 
-          isBefore(plan[i]["movieTime"]["startTime"], plan[j]["movieTime"]["startTime"])) or
-          (isAfter(plan[j]["movieTime"]["endTime"], plan[i]["movieTime"]["startTime"]) and 
-          isBefore(plan[j]["movieTime"]["startTime"], plan[i]["movieTime"]["startTime"])) or
-          (isAfter(plan[i]["movieTime"]["startTime"], plan[j]["movieTime"]["startTime"]) and
-          isBefore(plan[i]["movieTime"]["endTime"], plan[j]["movieTime"]["endTime"])) or
-          (isAfter(plan[j]["movieTime"]["startTime"], plan[i]["movieTime"]["startTime"]) and
-          isBefore(plan[j]["movieTime"]["endTime"], plan[i]["movieTime"]["endTime"]))):
+    for j in range(i + 1, len(plan)):
+      if areTwoMoviesSimultanous(plan[i], plan[j]) or areTwoMoviesSimultanous(plan[j], plan[i]):
         return True
   return False
+
+def diffTime(firstTime, secondTime):
+  diffTime = (int(secondTime[0:2]) - int(firstTime[0:2])) * 60
+  diffTime += int(secondTime[3:5]) - int(firstTime[3:5])
+  return diffTime
 

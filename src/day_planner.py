@@ -52,17 +52,35 @@ def createAllPlans(movies):
 def countMustWatch(plan):
   return len([elem for elem in plan if elem["mustWatch"]])
 
+def getHours(planElem):
+  return planElem["movieTime"]["startTime"][0:2]
+
+def sortPlan(plan):
+  return plan.sort(key=getHours)
+
+def getBreakTimes(plan):
+  if (not plan or len(plan) <= 1):
+    return 0
+  totalBreakTime = 0
+  for i in range(len(plan) - 1):
+    totalBreakTime += diffTime(addMinutes(int(plan[i]["movieTime"]["endTime"][0:2]), int(plan[i]["movieTime"]["endTime"][3:5]), 15), plan[i + 1]["movieTime"]["beginTime"])
+  return totalBreakTime
+
 def getBestPlan(plans):
   currentMustWatch = 0
   currentMayWatch = 0
-  # currentBreakTime = 0
-  # currentNonBreakTime = 0
+  currentBreakTime = 1440
+  currentNonBreakTime = 0
+  planWithSimul = 0
   for plan in plans:
     if hasSimultanousMovies(plan):
+      planWithSimul += 1
       continue
     else:
       mustWatch = countMustWatch(plan)
       mayWatch = len(plan) - mustWatch
+      orderedPlan = sortPlan(plan)
+      breakTimes = getBreakTimes(orderedPlan)
       if (mustWatch > currentMustWatch or (mustWatch == currentMustWatch and mayWatch > currentMayWatch)):
         currentMustWatch = mustWatch
         currentMayWatch = mayWatch
