@@ -53,39 +53,38 @@ def countMustWatch(plan):
   return len([elem for elem in plan if elem["mustWatch"]])
 
 def getHours(planElem):
-  return planElem["movieTime"]["startTime"][0:2]
+  return int(planElem["movieTime"]["startTime"][0:2])
 
 def sortPlan(plan):
-  return plan.sort(key=getHours)
+  return sorted(plan, key=getHours)
 
 def getBreakTimes(plan):
   if (not plan or len(plan) <= 1):
     return 0
   totalBreakTime = 0
   for i in range(len(plan) - 1):
-    totalBreakTime += diffTime(addMinutes(int(plan[i]["movieTime"]["endTime"][0:2]), int(plan[i]["movieTime"]["endTime"][3:5]), 15), plan[i + 1]["movieTime"]["beginTime"])
+    totalBreakTime += diffTime(addMinutes(int(plan[i]["movieTime"]["endTime"][0:2]), int(plan[i]["movieTime"]["endTime"][3:5]), 15), plan[i + 1]["movieTime"]["startTime"])
   return totalBreakTime
 
 def getBestPlan(plans):
   currentMustWatch = 0
   currentMayWatch = 0
-  currentBreakTime = 1440
-  currentNonBreakTime = 0
-  planWithSimul = 0
+  currentTotalBreakTime = 1440
   for plan in plans:
     if hasSimultanousMovies(plan):
-      planWithSimul += 1
       continue
     else:
       mustWatch = countMustWatch(plan)
       mayWatch = len(plan) - mustWatch
       orderedPlan = sortPlan(plan)
-      breakTimes = getBreakTimes(orderedPlan)
-      if (mustWatch > currentMustWatch or (mustWatch == currentMustWatch and mayWatch > currentMayWatch)):
+      totalBreakTimes = getBreakTimes(orderedPlan)
+      if (mustWatch > currentMustWatch or (mustWatch == currentMustWatch and mayWatch > currentMayWatch) or (mustWatch == currentMustWatch and mayWatch == currentMayWatch and totalBreakTimes < currentTotalBreakTime)):
         currentMustWatch = mustWatch
         currentMayWatch = mayWatch
+        currentTotalBreakTime = totalBreakTimes
         res = plan
-  print(res)
+        # Probably a way to stop before the end, when mustWatch < currentMustWatch
+  print("best plan = ", res, "nbMustWatch = ", currentMustWatch, "nbShouldWatch = ", currentMayWatch, "break time total = ", currentTotalBreakTime)
   return res
         
       
