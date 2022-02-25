@@ -28,6 +28,7 @@ def getMoviesInfo(movieBlock):
     if len(movieTimes):
       return(movieTitle.get_attribute("innerHTML").strip(), {
         "movieTimes": movieTimes,
+        "movieTimeBlocks": movieTimeBlocks,
         "title": movieTitle.get_attribute("innerHTML").strip()
       })
 
