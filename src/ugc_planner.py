@@ -16,7 +16,7 @@ driver = webdriver.Chrome()
 def openMoviePage(theatreId):
   driver.get("https://www.ugc.fr/cinema.html?id=" + theatreId)
   driver.find_element(By.CSS_SELECTOR, "#didomi-notice-agree-button").click()
-  time.sleep(1)
+  time.sleep(1) # TODO: better handling of wait
   try:
     driver.find_element(By.CSS_SELECTOR, "#modal-nl-advertising-rgpd-close").click()
   except NoSuchElementException:

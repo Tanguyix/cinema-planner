@@ -31,7 +31,7 @@ def getMoviesInfo(movieBlock):
         "title": movieTitle.get_attribute("innerHTML").strip()
       })
 
-def parseMoviesInLesHalles(driver):
+def parseMovies(driver):
   movieList = []
   try:
     movieBlocks = driver.find_elements(By.CSS_SELECTOR, ".slider-item .row")
@@ -48,7 +48,7 @@ def removePreviousPickedMovies(movieList, previous):
   return [movie for movie in movieList if movie[1]['title'] not in previousTitles]
 
 def pickMoviesToWatch(driver):
-  movieList = parseMoviesInLesHalles(driver)
+  movieList = parseMovies(driver)
   mustWatch = [
     inquirer.Checkbox(
       "must_watch",
@@ -69,4 +69,3 @@ def pickMoviesToWatch(driver):
   ]
   mayWatchAnswer = inquirer.prompt(may_watch)
   return {"mustWatchAnswer": mustWatchAnswer["must_watch"], "mayWatchAnswer": mayWatchAnswer["may_watch"]}
-

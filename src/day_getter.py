@@ -14,8 +14,9 @@ def pickDay(driver):
     promptResult = inquirer.prompt(q)
     driver.execute_script("let sts = [...document.getElementsByClassName('slick-track')]; sts.forEach((st) => {st.style.width = '100%';})")
     promptResult["day"]["elem"].click()
-    time.sleep(1)
+    time.sleep(1) # TODO: better handling of wait
     return promptResult["day"]["name"]
   except NoSuchElementException:
     print("error")
     pass
+  

@@ -30,4 +30,3 @@ def pickCinema():
     inquirer.List("cinema", "Dans quel cinéma souhaites-tu te rendre ?", choices = city["city_tuple_list"])
   ]
   return inquirer.prompt(theatreQuestion)["cinema"]
-  

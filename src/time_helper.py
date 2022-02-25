@@ -48,4 +48,3 @@ def diffTime(firstTime, secondTime):
   diffTime = (int(secondTime[0:2]) - int(firstTime[0:2])) * 60
   diffTime += int(secondTime[3:5]) - int(firstTime[3:5])
   return diffTime
-
