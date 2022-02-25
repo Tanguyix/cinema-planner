@@ -78,13 +78,11 @@ def getBestPlan(plans):
       mayWatch = len(plan) - mustWatch
       orderedPlan = sortPlan(plan)
       totalBreakTimes = getBreakTimes(orderedPlan)
-      if (mustWatch > currentMustWatch or (mustWatch == currentMustWatch and mayWatch > currentMayWatch) or (mustWatch == currentMustWatch and mayWatch == currentMayWatch and totalBreakTimes < currentTotalBreakTime)):
+      if ((mustWatch == 1 and mayWatch > 1) or mustWatch > currentMustWatch or (mustWatch == currentMustWatch and mayWatch > currentMayWatch) or (mustWatch == currentMustWatch and mayWatch == currentMayWatch and totalBreakTimes < currentTotalBreakTime)):
         currentMustWatch = mustWatch
         currentMayWatch = mayWatch
         currentTotalBreakTime = totalBreakTimes
         res = orderedPlan
-        if (mustWatch < currentMustWatch):
-          break
   return res
         
 def planDay(movies, availableHours):
