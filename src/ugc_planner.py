@@ -13,6 +13,7 @@ from pick_hours import pickHours
 from pick_cinema import pickCinema
 from day_planner import planDay
 from plan_display import displayPlan
+from login import loginToUGCAccount
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
@@ -32,3 +33,4 @@ availableHours = pickHours()
 movies = pickMoviesToWatch(driver)
 plan = planDay(movies, availableHours)
 displayPlan(plan, day, theatre["name"])
+isLogged = loginToUGCAccount(driver)
