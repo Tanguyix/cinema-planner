@@ -16,8 +16,10 @@ def getLoginCredentials():
 
 def logIn(driver, credentials):
   emailInput = driver.find_element(By.CSS_SELECTOR, "#mail")
+  # TODO Remove prev input
   emailInput.send_keys(credentials["email"])
   passwordInput = driver.find_element(By.CSS_SELECTOR, "#password")
+  # TODO Remove prev input
   passwordInput.send_keys(credentials["password"])
   driver.find_element(By.CSS_SELECTOR, "#connectLink").click()
   time.sleep(1) # TODO: better handling of wait
@@ -28,9 +30,7 @@ def logIn(driver, credentials):
     return False
 
 def openLoginPage(driver):
-  # To replace with just a click on login button
   driver.get("https://www.ugc.fr/login.html")
-  driver.find_element(By.CSS_SELECTOR, "#didomi-notice-agree-button").click() # To remove
 
 def loginToUGCAccount(driver):
   shouldLogIn = getLoginAnswer()
@@ -41,7 +41,7 @@ def loginToUGCAccount(driver):
     credentials = getLoginCredentials()
     loggedIn = logIn(driver, credentials)
     if loggedIn:
-      break
+      return True
     else:
       print("Erreur d'identification")
   

@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 import inquirer
 import time
 
+from clean_exit import cleanExit
+
 def getDayName(dayElem):
   dayElemSpan = dayElem.find_element(By.CSS_SELECTOR, "span")
   return (dayElemSpan.get_attribute("innerHTML").strip(), {"elem": dayElem, "name": dayElemSpan.get_attribute("innerHTML").strip()})
@@ -17,6 +19,5 @@ def pickDay(driver):
     time.sleep(1) # TODO: better handling of wait
     return promptResult["day"]["name"]
   except NoSuchElementException:
-    print("error")
-    pass
-  
+    print("Une erreur est survenue")
+    cleanExit(driver)
