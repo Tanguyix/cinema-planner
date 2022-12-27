@@ -12,32 +12,34 @@ def openDay(driver, day):
   for dayElem in dayElems:
     dayElemSpan = dayElem.find_element(By.CSS_SELECTOR, "span")
     if (day == dayElemSpan.get_attribute("innerHTML").strip()):
-      dayElem.click()
+      driver.execute_script("arguments[0].click();", dayElem)
 
-def openBookingPage(movieTimeBlocks, movieStartTime):
+def openBookingPage(driver, movieTimeBlocks, movieStartTime):
   for movieTimeBlock in movieTimeBlocks:
     startTime = movieTimeBlock.find_element(By.CSS_SELECTOR, ".screening-start").get_attribute("innerHTML").strip()
+    #TODO this PR : fix that, not working sometimes, movie not found
     if (startTime == movieStartTime):
       movieTimeBlock.click()
       time.sleep(1)
       return
+  print("hour for movie not found")
+  cleanExit(driver)
 
 def handleBookingForm(driver):
-  driver.find_element(By.CSS_SELECTOR, ".icon-listederoulante-down").click()
-  plusBtn = driver.find_elements(By.CSS_SELECTOR, ".plus")[0]
-  ActionChains(driver).move_to_element(plusBtn).perform()
-  time.sleep(1)
-  plusBtn.click()
+  driver.find_element(By.CLASS_NAME, "block--title").click()
+  plusBtn = driver.find_elements(By.CLASS_NAME, "plus")[0]
+  driver.execute_script("arguments[0].scrollIntoView(true);", plusBtn);
+  driver.execute_script("arguments[0].click();", plusBtn)
   time.sleep(1)
   driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
-  # Give time to click on checkbox, should handle later. Probably just click on label actually
-  time.sleep(5) 
+  cgrAccept = driver.find_element(By.CSS_SELECTOR, "#cgr")
+  driver.execute_script("arguments[0].click();", cgrAccept)
   validateBtn = driver.find_element(By.CSS_SELECTOR, ".btn.submit")
   ActionChains(driver).move_to_element(validateBtn).perform()
-  validateBtn.click()
+  driver.execute_script("arguments[0].click();", validateBtn)
   time.sleep(3)
   finalBtn = driver.find_element(By.CSS_SELECTOR, ".cta.submit")
-  finalBtn.click()
+  driver.execute_script("arguments[0].click();", finalBtn)
   time.sleep(3)
 
 
@@ -45,7 +47,7 @@ def bookMovie(driver, allMovies, movie):
   for existingMovie in allMovies:
     prevMovie = existingMovie[1]
     if (prevMovie["title"] == movie["title"]):
-      openBookingPage(prevMovie["movieTimeBlocks"], movie["movieTime"]["startTime"])
+      openBookingPage(driver, prevMovie["movieTimeBlocks"], movie["movieTime"]["startTime"])
       time.sleep(1)
       handleBookingForm(driver)
       return
