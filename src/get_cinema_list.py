@@ -19,7 +19,7 @@ def getCinemaList():
   navItems = driver.find_elements(By.CSS_SELECTOR, ".nav-item")
   for navItem in navItems:
     cinemaTuples = []
-    cityName = navItem.find_element(By.TAG_NAME, "h2").get_attribute("innerHTML").strip()
+    cityName = navItem.find_element(By.TAG_NAME, "h2").get_attribute("innerHTML").strip().replace(" &amp; ", " & ")
     if cityName == 'Tous':
       continue
     driver.execute_script("arguments[0].click();", navItem)
