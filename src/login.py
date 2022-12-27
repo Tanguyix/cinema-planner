@@ -16,10 +16,10 @@ def getLoginCredentials():
 
 def logIn(driver, credentials):
   emailInput = driver.find_element(By.CSS_SELECTOR, "#mail")
-  # TODO Remove prev input
+  emailInput.clear()
   emailInput.send_keys(credentials["email"])
   passwordInput = driver.find_element(By.CSS_SELECTOR, "#password")
-  # TODO Remove prev input
+  passwordInput.clear()
   passwordInput.send_keys(credentials["password"])
   driver.find_element(By.CSS_SELECTOR, "#connectLink").click()
   time.sleep(1) # TODO: better handling of wait

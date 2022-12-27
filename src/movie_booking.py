@@ -17,7 +17,6 @@ def openDay(driver, day):
 def openBookingPage(driver, movieTimeBlocks, movieStartTime):
   for movieTimeBlock in movieTimeBlocks:
     startTime = movieTimeBlock.find_element(By.CSS_SELECTOR, ".screening-start").get_attribute("innerHTML").strip()
-    #TODO this PR : fix that, not working sometimes, movie not found
     if (startTime == movieStartTime):
       movieTimeBlock.click()
       time.sleep(1)
