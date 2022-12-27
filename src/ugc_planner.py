@@ -1,3 +1,5 @@
+import os
+import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -11,12 +13,16 @@ from day_planner import planDay
 from plan_display import displayPlan
 from login import loginToUGCAccount
 from movie_booking import bookMovies
+from get_cinema_list import getCinemaList
 from clean_exit import cleanExit
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
+if not os.path.exists("cinemas.config"):
+  getCinemaList()
+  time.sleep(1)
 theatre = pickCinema()
-openMoviePage(driver, theatre["id"])
+openMoviePage(driver, theatre["url"])
 day = pickDay(driver)
 availableHours = pickHours()
 movies = pickMoviesToWatch(driver)
@@ -25,4 +31,4 @@ displayPlan(plan, day, theatre["name"])
 isLogged = loginToUGCAccount(driver)
 if not isLogged:
   cleanExit(driver)
-bookMovies(driver, plan, day, theatre["id"])
+bookMovies(driver, plan, day, theatre["url"])

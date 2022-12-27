@@ -53,9 +53,9 @@ def bookMovie(driver, allMovies, movie):
   print("Une erreur est survenue, le film" + movie["title"] + "et les suivants n'ont pas pu être réservés")
   cleanExit(driver)
 
-def bookMovies(driver, plan, day, theatreId):
+def bookMovies(driver, plan, day, url):
   for movie in plan:
-    openMoviePage(driver, theatreId)
+    openMoviePage(driver, url)
     openDay(driver, day)
     time.sleep(1)
     allMovies = parseMovies(driver)
