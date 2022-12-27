@@ -16,7 +16,7 @@ from clean_exit import cleanExit
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
 theatre = pickCinema()
-openMoviePage(driver, theatre["id"])
+openMoviePage(driver, theatre["url"])
 day = pickDay(driver)
 availableHours = pickHours()
 movies = pickMoviesToWatch(driver)
@@ -25,4 +25,4 @@ displayPlan(plan, day, theatre["name"])
 isLogged = loginToUGCAccount(driver)
 if not isLogged:
   cleanExit(driver)
-bookMovies(driver, plan, day, theatre["id"])
+bookMovies(driver, plan, day, theatre["url"])
