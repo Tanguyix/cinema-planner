@@ -15,7 +15,7 @@ def pickDay(driver):
     q = [inquirer.List("day", "Quel jour souhaites-tu aller au cinéma ?", choices = list(map(getDayName, days)))]
     promptResult = inquirer.prompt(q)
     driver.execute_script("let sts = [...document.getElementsByClassName('slick-track')]; sts.forEach((st) => {st.style.width = '100%';})")
-    promptResult["day"]["elem"].click()
+    driver.execute_script("arguments[0].click();", promptResult["day"]["elem"])
     time.sleep(1) # TODO: better handling of wait
     return promptResult["day"]["name"]
   except NoSuchElementException:
