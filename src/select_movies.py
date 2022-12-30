@@ -1,7 +1,9 @@
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.by import By
 import inquirer
 import re
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+
+from sens_critique import getInfoFromSensCritique
 
 def getMovieTimes(movieTimeBlocks):
   timeBlocks = []
@@ -15,7 +17,6 @@ def getMovieTimes(movieTimeBlocks):
     })
   return timeBlocks
 
-
 def getMoviesInfo(movieBlock):
   try:
     movieTimeBlocks = movieBlock.find_elements(By.CSS_SELECTOR, ".component--screening-cards li")
@@ -26,10 +27,14 @@ def getMoviesInfo(movieBlock):
     pass
   else:
     if len(movieTimes):
-      return(movieTitle.get_attribute("innerHTML").strip(), {
+      title = movieTitle.get_attribute("innerHTML").strip()
+      scInfo = getInfoFromSensCritique(title)
+      # Cannot use string format because it breaks inquirer
+      formattedTitle = title.title() + " (" + ', '.join(scInfo['fields']['genres']) + ") de " + ', '.join(scInfo['fields']['creators']) + " avec " + ', '.join(scInfo['fields']['casting'][:5]) + "(Note SC : " + scInfo['fields']['sc_rating'] + "/10)"
+      return(formattedTitle, {
         "movieTimes": movieTimes,
         "movieTimeBlocks": movieTimeBlocks,
-        "title": movieTitle.get_attribute("innerHTML").strip()
+        "title": title.capitalize(),
       })
 
 def parseMovies(driver):
@@ -39,7 +44,7 @@ def parseMovies(driver):
     for movieBlock in movieBlocks:
       movieInfo = getMoviesInfo(movieBlock)
       if movieInfo:
-        movieList.append(getMoviesInfo(movieBlock))
+        movieList.append(movieInfo)
   except NoSuchElementException:
     pass
   return movieList

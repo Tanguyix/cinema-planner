@@ -6,4 +6,4 @@ from skip_modals import skipModals
 def openMoviePage(driver, url):
   driver.get(url)
   time.sleep(1) # TODO: better handling of wait
-  skipModals()
+  skipModals(driver)
