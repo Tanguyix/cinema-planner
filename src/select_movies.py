@@ -17,7 +17,6 @@ def getMovieTimes(movieTimeBlocks):
     })
   return timeBlocks
 
-
 def getMoviesInfo(movieBlock):
   try:
     movieTimeBlocks = movieBlock.find_elements(By.CSS_SELECTOR, ".component--screening-cards li")
@@ -29,11 +28,13 @@ def getMoviesInfo(movieBlock):
   else:
     if len(movieTimes):
       title = movieTitle.get_attribute("innerHTML").strip()
-      return(movieTitle.get_attribute("innerHTML").strip(), {
+      scInfo = getInfoFromSensCritique(title)
+      # Cannot use string format because it breaks inquirer
+      formattedTitle = title.capitalize() + ", de " + ', '.join(scInfo['fields']['creators']) + " avec " + ', '.join(scInfo['fields']['casting'][:5]) + "(Note SC : " + scInfo['fields']['sc_rating'] + "/10)"
+      return(formattedTitle, {
         "movieTimes": movieTimes,
         "movieTimeBlocks": movieTimeBlocks,
-        "title": title,
-        "sc_info": getInfoFromSensCritique(title)
+        "title": title.capitalize(),
       })
 
 def parseMovies(driver):
