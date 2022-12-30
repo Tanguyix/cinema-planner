@@ -1,7 +1,9 @@
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.by import By
 import inquirer
 import re
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+
+from sens_critique import getInfoFromSensCritique
 
 def getMovieTimes(movieTimeBlocks):
   timeBlocks = []
@@ -26,10 +28,12 @@ def getMoviesInfo(movieBlock):
     pass
   else:
     if len(movieTimes):
+      title = movieTitle.get_attribute("innerHTML").strip()
       return(movieTitle.get_attribute("innerHTML").strip(), {
         "movieTimes": movieTimes,
         "movieTimeBlocks": movieTimeBlocks,
-        "title": movieTitle.get_attribute("innerHTML").strip()
+        "title": title,
+        "sc_info": getInfoFromSensCritique(title)
       })
 
 def parseMovies(driver):
@@ -39,7 +43,7 @@ def parseMovies(driver):
     for movieBlock in movieBlocks:
       movieInfo = getMoviesInfo(movieBlock)
       if movieInfo:
-        movieList.append(getMoviesInfo(movieBlock))
+        movieList.append(movieInfo)
   except NoSuchElementException:
     pass
   return movieList
