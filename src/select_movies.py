@@ -30,7 +30,7 @@ def getMoviesInfo(movieBlock):
       title = movieTitle.get_attribute("innerHTML").strip()
       scInfo = getInfoFromSensCritique(title)
       # Cannot use string format because it breaks inquirer
-      formattedTitle = title.capitalize() + ", de " + ', '.join(scInfo['fields']['creators']) + " avec " + ', '.join(scInfo['fields']['casting'][:5]) + "(Note SC : " + scInfo['fields']['sc_rating'] + "/10)"
+      formattedTitle = title.title() + " (" + ', '.join(scInfo['fields']['genres']) + ") de " + ', '.join(scInfo['fields']['creators']) + " avec " + ', '.join(scInfo['fields']['casting'][:5]) + "(Note SC : " + scInfo['fields']['sc_rating'] + "/10)"
       return(formattedTitle, {
         "movieTimes": movieTimes,
         "movieTimeBlocks": movieTimeBlocks,
